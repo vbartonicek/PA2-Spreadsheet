@@ -1,0 +1,7 @@
+Jednoduchý spreadsheet
+
+Spreadsheet a jednoduché výrazy. Do buňek je možné zadávat jednoduché výrazy (jako v kalkulačce) a funkce např. SIN, ABS [př. A2 = SIN(B2) + 1]. Editor detekuje cykly a nepovolí vytvoření výrazu, který by cyklus způsbil. Editor umožňuje zpracovávat výrazy se závorkami typu: ((A1+5)/B5)-A5 nebo s několika funkcemi aplikovatelnými na sloupce/řádky/oblasti typu AVG, SUM, apod. [př. A2 = SUM(B1:B20)]
+
+K implementaci je doporučeno použít ncurses.
+
+Tato úloha je hodnocena automatem a následně vyučujícím. Nejprve úlohu odevzdejte a odlaďte na automatu, pak jedno Vámi vybrané řešení předejte k ohodnocení vyučujícím. Předání úlohy k hodnocení učitelem se provede tlačítkem "Předat vyučujícímu" u zvoleného řešení. Vyučující bude hodnotit pouze jedno Vaše řešení, vyučující nezačně hodnotit dokud mu úlohu nepčředáte. Dokud není úloha ohodnocena jak automatem tak i učitelem, nejsou přidělené žádné body (jsou zobrazována pouze dílčí hodnocení v procentech).

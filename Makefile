@@ -1,0 +1,2 @@
+#Zde bude funkcni Makefile.
+

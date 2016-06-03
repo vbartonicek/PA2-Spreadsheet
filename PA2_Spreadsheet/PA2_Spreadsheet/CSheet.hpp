@@ -10,7 +10,10 @@
 #define CSheet_hpp
 
 #include <stdio.h>
+#include <iostream>
 #include <map>
+#include "CCell.hpp"
+#include "CString.hpp"
 
 using namespace std;
 
@@ -33,7 +36,7 @@ public:
     ~CSheet();
     
     
-    int GetCell (const int column, const int row) const;
+    CCell * GetCell (const int column, const int row) const;
     void EditCell (const int column, const int row, const int new_value);
     
     int getColumns() const;
@@ -44,7 +47,7 @@ public:
 private:
     int m_columns;
     int m_rows;
-    map < pair<int, int>, int > m_sheet;
+    map < pair<int, int>, CCell * > m_sheet;
 };
 
 #endif /* CSheet_hpp */

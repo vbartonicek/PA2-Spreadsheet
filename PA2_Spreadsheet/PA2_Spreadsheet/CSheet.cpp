@@ -16,12 +16,17 @@ CSheet::CSheet(const int columns, const int rows){
     for ( int column = 0; column != m_columns; column++){
         // Row
         for ( int row = 0; row != m_rows; row++){
-            m_sheet[make_pair(column,row)] = column + row + column * row;
+            CCell * newCell = new CString;
+            m_sheet[make_pair(column,row)] = newCell;
         }
     }
 }
 
 CSheet::~CSheet(){
+    // deleting all CCell objects
+    for ( auto it = m_sheet.begin(); it != m_sheet.end(); it++ ){
+        delete it->second;
+    }
     
 }
 
@@ -30,20 +35,20 @@ void CSheet::Print() const{
     for ( int column = 0; column != m_columns; column++){
         // Row
         for ( int row = 0; row != m_rows; row++){
-            printf("%d,\t", m_sheet.at(make_pair(column,row)));
+            //cout << m_sheet.at(make_pair(column,row)) << ",\t" << endl;
         }
         printf("\n");
     }
 }
 
 
-int CSheet::GetCell (const int column, const int row) const{
+CCell * CSheet::GetCell (const int column, const int row) const{
     return m_sheet.at( make_pair(column,row) );
 
 }
 
 void CSheet::EditCell (const int column, const int row, const int new_value){
-
+    // Todo
 }
 
 int CSheet::getColumns() const{

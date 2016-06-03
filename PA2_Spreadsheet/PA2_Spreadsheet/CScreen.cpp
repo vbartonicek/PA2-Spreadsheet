@@ -49,7 +49,7 @@ void CScreen::Print() const{
         {
             addch(ACS_VLINE);
             printw(" ");
-            printw("%d", m_sheet->GetCell(col, row));
+            printw("%s", m_sheet->GetCell(col, row)->getShowValue().c_str());
             addch(A_ALTCHARSET);
             addch('\t');
         }

@@ -14,6 +14,8 @@
 #include <map>
 #include "CCell.hpp"
 #include "CString.hpp"
+#include "CNumber.hpp"
+#include "CExpression.hpp"
 
 using namespace std;
 

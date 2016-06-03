@@ -10,8 +10,11 @@
 #define CSpreadsheetSimulator_hpp
 
 #include <stdio.h>
+#include <iostream>
 #include "CSheet.hpp"
 #include "CScreen.hpp"
+
+using namespace std;
 
 /**
  * @brief Class representing the application Spreadsheet Simulator.

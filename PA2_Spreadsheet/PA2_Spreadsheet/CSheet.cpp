@@ -16,7 +16,7 @@ CSheet::CSheet(const int columns, const int rows){
     for ( int column = 0; column != m_columns; column++){
         // Row
         for ( int row = 0; row != m_rows; row++){
-            CCell * newCell = new CString;
+            CCell * newCell = new CNumber;
             m_sheet[make_pair(column,row)] = newCell;
         }
     }

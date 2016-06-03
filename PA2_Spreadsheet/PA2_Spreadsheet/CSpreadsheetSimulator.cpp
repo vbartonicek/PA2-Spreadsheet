@@ -20,6 +20,5 @@ CSpreadsheetSimulator::~CSpreadsheetSimulator(){
 }
 
 void CSpreadsheetSimulator::Run(){
-    printf("Run method called.\n");
-    m_screen->Print();
+    m_screen->ScreenManager();
 }

@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <map>
 #include <ncurses.h>
+#include <iostream>
 
 #include "CSheet.hpp"
 
@@ -35,10 +36,25 @@ public:
      */
     ~CScreen();
     
-    void Print() const;
+    void ScreenManager();
+    void PrintHeader() const;
+    void PrintSheet() const;
+    void PrintStatus() const;
+    void CloseWindow() const;
+    
+    void SetColumnPositionNext();
+    void SetColumnPositionPrevious();
+    int GetColumnPosition() const;
+    char GetColumnName(const int& number) const;
+    
+    void SetRowPositionNext();
+    void SetRowPositionPrevious();
+    int GetRowPosition() const;
     
 private:
     CSheet * m_sheet;
+    int m_curr_column;
+    int m_curr_row;
 };
 
 #endif /* CScreen_hpp */

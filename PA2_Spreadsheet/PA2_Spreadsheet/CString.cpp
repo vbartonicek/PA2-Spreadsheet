@@ -11,7 +11,7 @@
 CString::CString(){
     m_type = TYPE_STRING;
     m_show_value = "S" + to_string(rand() % 100);
-    m_edit_value = "";
+    m_edit_value = "'" + m_show_value + "'";
 }
 
 CString::~CString(){

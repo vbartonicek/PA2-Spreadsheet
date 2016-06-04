@@ -17,3 +17,7 @@ CExpression::CExpression(){
 CExpression::~CExpression(){
     
 }
+
+void CExpression::SetShowValue(string new_show_value){
+    m_show_value = "X" + new_show_value;
+}

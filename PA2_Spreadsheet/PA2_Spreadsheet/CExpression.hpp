@@ -32,6 +32,8 @@ public:
      */
     ~CExpression();
     
+    virtual void SetShowValue(string new_show_value);
+    
 private:
 };
 

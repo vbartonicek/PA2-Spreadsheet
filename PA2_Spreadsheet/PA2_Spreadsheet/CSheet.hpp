@@ -41,6 +41,7 @@ public:
     CCell * GetCell (const int column, const int row) const;
     void EditNumberCell (const int column, const int row, const char * new_value);
     void EditStringCell (const int column, const int row, const char * new_value);
+    void EditExpressionCell (const int column, const int row, const char * new_value);
     
     int getColumns() const;
     int getRows() const;

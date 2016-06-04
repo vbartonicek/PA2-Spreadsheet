@@ -67,6 +67,16 @@ void CSheet::EditStringCell (const int column, const int row, const char * new_v
     m_sheet.at( make_pair(column, row))->SetEditValue(new_value);
 }
 
+void CSheet::EditExpressionCell (const int column, const int row, const char * new_value){
+    if ( m_sheet.at( make_pair(column, row))->GetType() != TYPE_STRING ) {
+        delete m_sheet.at( make_pair(column, row));
+        CExpression * newCell = new CExpression;
+        m_sheet[make_pair(column,row)] = newCell;
+    }
+    
+    m_sheet.at( make_pair(column, row))->SetEditValue(new_value);
+}
+
 int CSheet::getColumns() const{
     return m_columns;
 }

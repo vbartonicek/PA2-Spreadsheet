@@ -20,14 +20,23 @@ CScreen::~CScreen(){
 
 void CScreen::ScreenManager() {
     int c = 0;
+    int screenSize_x;
+    int screenSize_y;
     
     initscr();
     curs_set(0);
     keypad(stdscr, TRUE);
     start_color();
-    init_pair(1, COLOR_RED, COLOR_BLACK);
+    init_pair(1, COLOR_BLACK, COLOR_WHITE);
     
     while (1){
+        getmaxyx(stdscr, screenSize_x, screenSize_y);
+        while ( screenSize_x < 25 || screenSize_y < 110) {
+            clear();
+            mvprintw(0,0,"Screen must be a least 110x25\n");
+            refresh();
+            getmaxyx(stdscr, screenSize_x, screenSize_y);
+        }
         PrintHeader();
         PrintSheet();
         PrintStatus();
@@ -150,7 +159,9 @@ void CScreen::HandleCellInput() {
     getstr(str);
     
     if ( str[0] == '=') {
-        printw("EXPRESSION Candidate: %s\n", str);
+        // EXPRESSION CANDIDATE
+        m_sheet->EditExpressionCell(m_curr_column, m_curr_row, str);
+        //printw("EXPRESSION Candidate: %s\n", str);
         return;
     }
     else {

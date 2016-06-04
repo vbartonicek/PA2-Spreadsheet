@@ -36,7 +36,7 @@ public:
      */
     ~CCell();
     
-    void SetShowValue(string new_show_value);
+    virtual void SetShowValue(string new_show_value);
     string GetShowValue() const;
     
     void SetEditValue(string new_edit_value);

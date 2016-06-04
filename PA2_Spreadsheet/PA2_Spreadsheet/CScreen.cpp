@@ -18,8 +18,11 @@ CScreen::~CScreen(){
     
 }
 
+
 void CScreen::ScreenManager() {
     int c = 0;
+    int x_start = 0;
+    int y_start = 0;
     int screenSize_x;
     int screenSize_y;
     
@@ -27,19 +30,23 @@ void CScreen::ScreenManager() {
     curs_set(0);
     keypad(stdscr, TRUE);
     start_color();
+    
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
+    init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+    
     
     while (1){
         getmaxyx(stdscr, screenSize_x, screenSize_y);
-        while ( screenSize_x < 25 || screenSize_y < 110) {
+        while ( screenSize_x < (x_start + 30) || screenSize_y < (y_start + 110)) {
             clear();
-            mvprintw(0,0,"Screen must be a least 110x25\n");
+            mvprintw(0,0,"Screen must be a least %dx%d\n",(y_start + 110),(x_start + 30));
             refresh();
             getmaxyx(stdscr, screenSize_x, screenSize_y);
         }
-        PrintHeader();
-        PrintSheet();
-        PrintStatus();
+        PrintTable(x_start, y_start);
+        PrintHeaders(x_start, y_start);
+        PrintValues(x_start, y_start);
+        PrintStatus(x_start, y_start);
         refresh();
         c = getch();
         
@@ -57,7 +64,7 @@ void CScreen::ScreenManager() {
                 SetColumnPositionNext();
                 break;
             case KEY_F(2):
-                PrintEditInstructions();
+                PrintEditInstructions(x_start, y_start);
                 HandleCellInput();
                 break;
             case KEY_F(3):
@@ -65,86 +72,150 @@ void CScreen::ScreenManager() {
                 return;
             default:
                 break;
-        
+                
         }
-        //if (getch() == "q") break;
-    };
-}
-
-void CScreen::PrintHeader() const{
-    attron(A_BOLD);
-    mvprintw(0,35,"SPREADSHEET SIMULATOR\n");
-    attroff(A_BOLD);
-    printw("\n");
-}
-
-void CScreen::PrintSheet() const{
-    
-    //header
-    attron(A_UNDERLINE);
-    attron(A_BOLD);
-    for (int col = 0; col!= m_sheet->getColumns(); col++)
-    {
-        addch('\t');
-        printw("  ");
-        printw("%c",GetColumnName(col));
-        addch(A_ALTCHARSET);
+        
     }
-    addch('\t');
-    addch(' ');
-    attroff(A_BOLD);
-    printw("\n");
+    //mvprintw(y_start + 3, x_start + 20,"123456789");
+}
+
+void CScreen::PrintTable(const int& x_start, const int& y_start) const {
+    // HORIZONTAL LINES
+    attron(COLOR_PAIR(2));
+    move(y_start, x_start + 0);
+    hline(0, 110);
+    move(y_start + 2, x_start + 1);
+    hline(0, 109);
+    attroff(COLOR_PAIR(2));
     
-    //table
+    // inner lines
+    for (int i = 1; i != m_sheet->getRows(); i++){
+        move(y_start + 2 + 2 * i , x_start + 10);
+        hline(0, 100);
+    }
     
-    for (int row = 0; row!= m_sheet->getRows(); row++)
+    attron(COLOR_PAIR(2));
+    move(y_start + 2 + 2 * m_sheet->getRows() , x_start + 0);
+    hline(0, 110);
+    attroff(COLOR_PAIR(2));
+    
+    //HEADER HORIZONTAL INNER LINES
+    attron(COLOR_PAIR(1));
+    for (int i = 1; i != m_sheet->getRows(); i++){
+        move(y_start + 2 + 2 * i , x_start + 1);
+        hline(0, 8);
+    }
+    attroff(COLOR_PAIR(1));
+    
+    
+    // VERTICAL LINES
+    attron(COLOR_PAIR(2));
+    move(y_start + 1, x_start + 0);
+    vline(0, 21);
+    move(y_start + 1, x_start + 9);
+    vline(0, 21);
+    attroff(COLOR_PAIR(2));
+    
+    // inner lines
+    for (int i = 1; i != m_sheet->getColumns(); i++){
+        move(y_start + 2 , x_start + 9 + 10 * i);
+        vline(0, 20);
+    }
+    
+    attron(COLOR_PAIR(2));
+    move(y_start + 1 , x_start + 9 + 10 * m_sheet->getColumns());
+    vline(0, 21);
+    attroff(COLOR_PAIR(2));
+    
+    
+    //HEADER VERTICAL INNER LINES
+    attron(COLOR_PAIR(1));
+    for (int i = 1; i != m_sheet->getColumns(); i++){
+        move(y_start + 1 , x_start + 9 + 10 * i);
+        vline(0, 1);
+    }
+    attroff(COLOR_PAIR(1));
+}
+
+void CScreen::PrintHeaders(const int& x_start, const int& y_start) const {
+    
+    // COLUMN HEADERS
+    attron(COLOR_PAIR(1));
+    for (int i = 0; i != m_sheet->getColumns(); i++){
+        mvprintw(y_start + 1, x_start + 10 + 10 * i,"    %c    ", GetColumnName(i));
+    }
+    attroff(COLOR_PAIR(1));
+    
+    // ROW HEADERS
+    attron(COLOR_PAIR(1));
+    for (int i = 1; i != m_sheet->getRows() + 1; i++){
+        if (i < 10) mvprintw(y_start + 1 + 2 * i, x_start + 1," ROW  %d ", i);
+        else if (i < 100) mvprintw(y_start + 1 + 2 * i, x_start + 1," ROW %d ", i);
+        else mvprintw(y_start + 1 + 2 * i, x_start + 1," ROW >< ");
+    }
+    attroff(COLOR_PAIR(1));
+
+}
+
+void CScreen::PrintValues(const int& x_start, const int& y_start) const {
+    string value;
+    for (int row = 0; row != m_sheet->getRows(); row++)
     {
-        attron(A_BOLD);
-        printw("ROW %d\t", row + 1);
-        attroff(A_BOLD);
-        for (int col = 0; col!= m_sheet->getColumns(); col++)
+        for (int col = 0; col != m_sheet->getColumns(); col++)
         {
-            addch(ACS_VLINE);
             if (GetColumnPosition() == col && GetRowPosition() == row) attron(COLOR_PAIR(1));
-            printw(" ");
-            printw("%s", m_sheet->GetCell(col, row)->GetShowValue().c_str());
-            addch(A_ALTCHARSET);
-            addch('\t');
+            value = m_sheet->GetCell(col, row)->GetShowValue();
+            
+            
+            if (value.length() > 9) {
+                mvprintw(y_start + 3 + 2 * row, x_start + 10 + 10 * col,"%c%c%c%c%c ...", value[0],value[1],value[2],value[3],value[4]);
+            }
+            else {
+                long long int i;
+                for ( i = 0; i != (9 - value.length()); i++ ) {
+                    mvprintw(y_start + 3 + 2 * row, x_start + 10 + (int) i + 10 * col," ");
+                }
+            
+                for ( long long int j = 0; j != value.length(); j++ ) {
+                    mvprintw(y_start + 3 + 2 * row, x_start + 10 + (int) i + (int) j + 10 * col,"%c", value[j]);
+                }
+            }
+            
             if (GetColumnPosition() == col && GetRowPosition() == row) attroff(COLOR_PAIR(1));
         }
-        addch(ACS_VLINE);
-        printw("\n");
+        
     }
-    attroff(A_UNDERLINE);
 }
 
-void CScreen::PrintStatus() const{
-    printw("\n");
+void CScreen::PrintStatus(const int& x_start, const int& y_start) const{
+    
+    move(y_start + 3 + 2 * m_sheet->getRows() , x_start + 0);
+    
     
     attron(A_BOLD);
-    mvprintw(15,2,"Position: ");
+    printw("Position: ");
     attroff(A_BOLD);
     printw("%c%d\n", GetColumnName(GetColumnPosition()), GetRowPosition() + 1);
     
     attron(A_BOLD);
-    mvprintw(17,2,"Value: ");
+    printw("Value: ");
     attroff(A_BOLD);
     printw("%s\n", m_sheet->GetCell(GetColumnPosition(), GetRowPosition())->GetShowValue().c_str());
     
     attron(A_BOLD);
-    mvprintw(19,2,"Expression: ");
+    printw("Expression: ");
     attroff(A_BOLD);
     printw("%s\n\n", m_sheet->GetCell(GetColumnPosition(), GetRowPosition())->GetEditValue().c_str());
     
     
     attron(A_BOLD);
-    mvprintw(20,2,"Type: ");
+    printw("Type: ");
     attroff(A_BOLD);
     printw("%s\n\n", m_sheet->GetCell(GetColumnPosition(), GetRowPosition())->GetTypeName().c_str());
 
 }
 
-void CScreen::PrintEditInstructions() const{
+void CScreen::PrintEditInstructions(const int& x_start, const int& y_start) const{
     attron(A_BOLD);
     printw("Insert new value: ");
     attroff(A_BOLD);

@@ -10,6 +10,7 @@
 #define CScreen_hpp
 
 #include <stdio.h>
+#include <string>
 #include <map>
 #include <ncurses.h>
 #include <iostream>
@@ -37,10 +38,12 @@ public:
     ~CScreen();
     
     void ScreenManager();
-    void PrintHeader() const;
-    void PrintSheet() const;
-    void PrintStatus() const;
-    void PrintEditInstructions() const;
+    void PrintTable(const int& x_start, const int& y_start) const;
+    void PrintHeaders(const int& x_start, const int& y_start) const;
+    void PrintValues(const int& x_start, const int& y_start) const;
+    void PrintStatus(const int& x_start, const int& y_start) const;
+    
+    void PrintEditInstructions(const int& x_start, const int& y_start) const;
     void CloseWindow() const;
     
     void HandleCellInput ();

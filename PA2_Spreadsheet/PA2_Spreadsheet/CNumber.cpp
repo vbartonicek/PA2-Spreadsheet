@@ -10,8 +10,8 @@
 
 CNumber::CNumber(){
     m_type = TYPE_NUMBER;
-    m_show_value = to_string(rand() % 100);
-    m_edit_value = m_show_value;
+    m_edit_value = "";
+    m_show_value = m_edit_value;
 }
 
 CNumber::~CNumber(){

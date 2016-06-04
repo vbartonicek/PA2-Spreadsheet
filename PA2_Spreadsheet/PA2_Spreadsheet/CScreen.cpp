@@ -47,7 +47,11 @@ void CScreen::ScreenManager() {
             case KEY_RIGHT:
                 SetColumnPositionNext();
                 break;
-            case KEY_F(4):
+            case KEY_F(2):
+                PrintEditInstructions();
+                HandleCellInput();
+                break;
+            case KEY_F(3):
                 CloseWindow();
                 return;
             default:
@@ -94,7 +98,7 @@ void CScreen::PrintSheet() const{
             addch(ACS_VLINE);
             if (GetColumnPosition() == col && GetRowPosition() == row) attron(COLOR_PAIR(1));
             printw(" ");
-            printw("%s", m_sheet->GetCell(col, row)->getShowValue().c_str());
+            printw("%s", m_sheet->GetCell(col, row)->GetShowValue().c_str());
             addch(A_ALTCHARSET);
             addch('\t');
             if (GetColumnPosition() == col && GetRowPosition() == row) attroff(COLOR_PAIR(1));
@@ -109,24 +113,81 @@ void CScreen::PrintStatus() const{
     printw("\n");
     
     attron(A_BOLD);
-    mvprintw(15,5,"Position: ");
+    mvprintw(15,2,"Position: ");
     attroff(A_BOLD);
     printw("%c%d\n", GetColumnName(GetColumnPosition()), GetRowPosition() + 1);
     
     attron(A_BOLD);
-    mvprintw(17,5,"Value: ");
+    mvprintw(17,2,"Value: ");
     attroff(A_BOLD);
-    printw("%s\n", m_sheet->GetCell(GetColumnPosition(), GetRowPosition())->getShowValue().c_str());
+    printw("%s\n", m_sheet->GetCell(GetColumnPosition(), GetRowPosition())->GetShowValue().c_str());
     
     attron(A_BOLD);
-    mvprintw(19,5,"Expression: ");
+    mvprintw(19,2,"Expression: ");
     attroff(A_BOLD);
-    printw("53\n");
+    printw("%s\n\n", m_sheet->GetCell(GetColumnPosition(), GetRowPosition())->GetEditValue().c_str());
+    
+    
+    attron(A_BOLD);
+    mvprintw(20,2,"Type: ");
+    attroff(A_BOLD);
+    printw("%s\n\n", m_sheet->GetCell(GetColumnPosition(), GetRowPosition())->GetTypeName().c_str());
 
+}
+
+void CScreen::PrintEditInstructions() const{
+    attron(A_BOLD);
+    printw("Insert new value: ");
+    attroff(A_BOLD);
 }
 
 void CScreen::CloseWindow() const {
     endwin();
+}
+
+void CScreen::HandleCellInput() {
+    char str [100];
+    getstr(str);
+    
+    if ( str[0] == '=') {
+        printw("EXPRESSION Candidate: %s\n", str);
+        return;
+    }
+    else {
+        int i = 0;
+        
+        while (str[i]){
+            if (i == 99) {
+                printw("WRONG INPUT\n");
+                return;
+            }
+            
+            if ( !isdigit(str[i]) ) {
+                while (str[i]){
+                    if (i == 99) {
+                        printw("WRONG INPUT\n");
+                        return;
+                    }
+                    
+                    if ( !isalnum(str[i]) ) {
+                        printw("WRONG INPUT\n");
+                        return;
+                    }
+                    i++;
+                }
+                // STRING
+                m_sheet->EditStringCell(m_curr_column, m_curr_row, str);
+                //printw("STRING\n");
+                return;
+            }
+            i++;
+        }
+        // NUMBER
+        m_sheet->EditNumberCell(m_curr_column, m_curr_row, str);
+        //printw("NUMBER\n");
+        return;
+    }
+    
 }
 
 void CScreen::SetColumnPositionNext() {

@@ -16,7 +16,7 @@ CSheet::CSheet(const int columns, const int rows){
     for ( int column = 0; column != m_columns; column++){
         // Row
         for ( int row = 0; row != m_rows; row++){
-            CCell * newCell = new CNumber;
+            CCell * newCell = new CCell;
             m_sheet[make_pair(column,row)] = newCell;
         }
     }
@@ -24,7 +24,7 @@ CSheet::CSheet(const int columns, const int rows){
 
 CSheet::~CSheet(){
     // deleting all CCell objects
-    for ( auto it = m_sheet.begin(); it != m_sheet.end(); it++ ){
+    for ( map < pair<int, int>, CCell * >::iterator it = m_sheet.begin(); it != m_sheet.end(); it++ ){
         delete it->second;
     }
     
@@ -47,8 +47,24 @@ CCell * CSheet::GetCell (const int column, const int row) const{
 
 }
 
-void CSheet::EditCell (const int column, const int row, const int new_value){
-    // Todo
+void CSheet::EditNumberCell (const int column, const int row, const char * new_value){
+    if ( m_sheet.at( make_pair(column, row))->GetType() != TYPE_NUMBER ) {
+        delete m_sheet.at( make_pair(column, row));
+        CNumber * newCell = new CNumber;
+        m_sheet[make_pair(column,row)] = newCell;
+    }
+    
+    m_sheet.at( make_pair(column, row))->SetEditValue(new_value);
+}
+
+void CSheet::EditStringCell (const int column, const int row, const char * new_value){
+    if ( m_sheet.at( make_pair(column, row))->GetType() != TYPE_STRING ) {
+        delete m_sheet.at( make_pair(column, row));
+        CString * newCell = new CString;
+        m_sheet[make_pair(column,row)] = newCell;
+    }
+    
+    m_sheet.at( make_pair(column, row))->SetEditValue(new_value);
 }
 
 int CSheet::getColumns() const{

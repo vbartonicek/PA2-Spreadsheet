@@ -39,13 +39,14 @@ public:
     
     
     CCell * GetCell (const int column, const int row) const;
-    void EditCell (const int column, const int row, const int new_value);
+    void EditNumberCell (const int column, const int row, const char * new_value);
+    void EditStringCell (const int column, const int row, const char * new_value);
     
     int getColumns() const;
     int getRows() const;
     
     void Print() const;
-
+    
 private:
     int m_columns;
     int m_rows;

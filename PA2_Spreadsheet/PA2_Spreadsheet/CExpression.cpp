@@ -10,7 +10,7 @@
 
 CExpression::CExpression(){
     m_type = TYPE_EXPRESSION;
-    m_show_value = "E" + to_string(rand() % 100);
+    m_show_value = "EXP";
     m_edit_value = "Not processed";
 }
 

@@ -40,7 +40,10 @@ public:
     void PrintHeader() const;
     void PrintSheet() const;
     void PrintStatus() const;
+    void PrintEditInstructions() const;
     void CloseWindow() const;
+    
+    void HandleCellInput ();
     
     void SetColumnPositionNext();
     void SetColumnPositionPrevious();

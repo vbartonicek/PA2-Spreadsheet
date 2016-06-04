@@ -36,11 +36,14 @@ public:
      */
     ~CCell();
     
-    void setShowValue(string new_show_value);
-    string getShowValue() const;
+    void SetShowValue(string new_show_value);
+    string GetShowValue() const;
     
-    void setEditValue(string new_edit_value);
-    string getEditValue() const;
+    void SetEditValue(string new_edit_value);
+    string GetEditValue() const;
+    
+    int GetType() const;
+    string GetTypeName() const;
     
     // TODO Methods for dependencies
     

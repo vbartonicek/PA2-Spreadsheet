@@ -25,6 +25,7 @@ void CScreen::ScreenManager() {
     int y_start = 0;
     int screenSize_x;
     int screenSize_y;
+    bool help = false;
     
     initscr();
     curs_set(0);
@@ -34,6 +35,9 @@ void CScreen::ScreenManager() {
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
     init_pair(2, COLOR_YELLOW, COLOR_BLACK);
     
+    PrintTable(x_start, y_start);
+    PrintHeaders(x_start, y_start);
+    ClearHelp(x_start, y_start);
     
     while (1){
         getmaxyx(stdscr, screenSize_x, screenSize_y);
@@ -43,8 +47,6 @@ void CScreen::ScreenManager() {
             refresh();
             getmaxyx(stdscr, screenSize_x, screenSize_y);
         }
-        PrintTable(x_start, y_start);
-        PrintHeaders(x_start, y_start);
         PrintValues(x_start, y_start);
         PrintStatus(x_start, y_start);
         refresh();
@@ -63,9 +65,15 @@ void CScreen::ScreenManager() {
             case KEY_RIGHT:
                 SetColumnPositionNext();
                 break;
+            case KEY_F(1):
+                if ( help ) ClearHelp(x_start, y_start);
+                else PrintHelp(x_start, y_start);
+                help = ! help;
+                break;
             case KEY_F(2):
                 PrintEditInstructions(x_start, y_start);
                 HandleCellInput();
+                ClearEditInstructions(x_start, y_start);
                 break;
             case KEY_F(3):
                 CloseWindow();
@@ -191,7 +199,6 @@ void CScreen::PrintStatus(const int& x_start, const int& y_start) const{
     
     move(y_start + 3 + 2 * m_sheet->getRows() , x_start + 0);
     
-    
     attron(A_BOLD);
     printw("Position: ");
     attroff(A_BOLD);
@@ -205,9 +212,8 @@ void CScreen::PrintStatus(const int& x_start, const int& y_start) const{
     attron(A_BOLD);
     printw("Expression: ");
     attroff(A_BOLD);
-    printw("%s\n\n", m_sheet->GetCell(GetColumnPosition(), GetRowPosition())->GetEditValue().c_str());
-    
-    
+    printw("%s\n", m_sheet->GetCell(GetColumnPosition(), GetRowPosition())->GetEditValue().c_str());
+
     attron(A_BOLD);
     printw("Type: ");
     attroff(A_BOLD);
@@ -216,9 +222,33 @@ void CScreen::PrintStatus(const int& x_start, const int& y_start) const{
 }
 
 void CScreen::PrintEditInstructions(const int& x_start, const int& y_start) const{
+    move(y_start + 8 + 2 * m_sheet->getRows() , x_start + 0);
     attron(A_BOLD);
     printw("Insert new value: ");
     attroff(A_BOLD);
+}
+
+void CScreen::ClearEditInstructions(const int& x_start, const int& y_start) const{
+    move(y_start + 8 + 2 * m_sheet->getRows() , x_start + 0);
+    clrtoeol();
+}
+
+
+void CScreen::PrintHelp(const int& x_start, const int& y_start) const{
+    move(y_start + 10 + 2 * m_sheet->getRows() , x_start + 0);
+    clrtoeol();
+    attron(A_BOLD);
+    printw("HELP\n");
+    attroff(A_BOLD);
+    printw("F1 - Hide help\t\tF2 - Edit cell\t\tF3 - Exit\t Arrows - movement");
+}
+
+void CScreen::ClearHelp(const int& x_start, const int& y_start) const{
+    move(y_start + 10 + 2 * m_sheet->getRows() , x_start + 0);
+    clrtoeol();
+    printw("For help press F1");
+    move(y_start + 11 + 2 * m_sheet->getRows() , x_start + 0);
+    clrtoeol();
 }
 
 void CScreen::CloseWindow() const {

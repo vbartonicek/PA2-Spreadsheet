@@ -36,7 +36,7 @@ public:
     
     /**
      * @brief Runs the application.
-     * @details
+     * @details Calls the Screen manager.
      */
     void Run();
     

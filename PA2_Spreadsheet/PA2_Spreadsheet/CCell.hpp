@@ -36,13 +36,47 @@ public:
      */
     ~CCell();
     
+    
+    /**
+     * @brief Set cell show value
+     * @details Method to set the show value of the cell
+     * @param[in] new_show_value New show value of the cell
+     */
     virtual void SetShowValue(string new_show_value);
+    
+    /**
+     * @brief Get show value
+     * @details Method to provide show value of the cell
+     * @return Returns show value of the cell
+     */
     string GetShowValue() const;
     
+    /**
+     * @brief Set cell edit value
+     * @details Method to set the edit value of the cell
+     * @param[in] new_edit_value New edit value of the cell
+     */
     void SetEditValue(string new_edit_value);
-    string GetEditValue() const;
     
+    /**
+     * @brief Get edit value
+     * @details Method to provide edit value of the cell
+     * @return Returns edit value of the cell
+     */
+    string GetEditValue() const;
+
+    /**
+     * @brief Get cell type
+     * @details Method to provide type of the cell
+     * @return Returns the cell type
+     */
     int GetType() const;
+    
+    /**
+     * @brief Get cell type name
+     * @details Method to provide type name of the cell
+     * @return Returns the name of cell type
+     */
     string GetTypeName() const;
     
     // TODO Methods for dependencies

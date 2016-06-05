@@ -30,18 +30,6 @@ CSheet::~CSheet(){
     
 }
 
-void CSheet::Print() const{
-    // Column
-    for ( int column = 0; column != m_columns; column++){
-        // Row
-        for ( int row = 0; row != m_rows; row++){
-            //cout << m_sheet.at(make_pair(column,row)) << ",\t" << endl;
-        }
-        printf("\n");
-    }
-}
-
-
 CCell * CSheet::GetCell (const int column, const int row) const{
     return m_sheet.at( make_pair(column,row) );
 

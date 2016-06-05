@@ -8,6 +8,14 @@
 
 #include "CSpreadsheetSimulator.hpp"
 
+
+/**
+ * @mainpage PA2 Spreadsheet Simulator
+ * @author Vratislav Bartonicek
+ *
+ * PA2 Spreadsheet Simulator is a basic spreadsheet simulator
+ */
+
 int main(int argc, const char * argv[]) {
     
     CSpreadsheetSimulator application;

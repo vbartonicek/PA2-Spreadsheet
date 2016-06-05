@@ -11,9 +11,8 @@
 
 #include <stdio.h>
 #include <string>
+#include <sstream>
 #include <set>
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
 #include "CCell.hpp"
 
 using namespace std;
@@ -32,7 +31,13 @@ public:
      */
     ~CNumber();
     
+    void SetNumber(const long long& newNumber);
+    void SetNumber(const char * newNumber);
+    
+    long long GetNumber() const;
+    
 private:
+    long long m_number;
 };
 
 #endif /* CNumber_hpp */

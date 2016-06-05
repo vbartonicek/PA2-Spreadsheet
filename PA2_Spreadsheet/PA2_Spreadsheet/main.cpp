@@ -8,7 +8,6 @@
 
 #include "CSpreadsheetSimulator.hpp"
 
-
 /**
  * @mainpage PA2 Spreadsheet Simulator
  * @author Vratislav Bartonicek

@@ -18,6 +18,22 @@ CExpression::~CExpression(){
     
 }
 
-void CExpression::SetShowValue(string new_show_value){
-    m_show_value = "X" + new_show_value;
+void CExpression::SetNumber(const long long& newNumber){
+    std::ostringstream ss;
+    m_number  = newNumber;
+    
+    ss << m_number;
+    std::string str = ss.str();
+    SetShowValue(str);
+    SetEditValue(str);
+}
+
+void CExpression::SetNumber(const char * newNumber){
+    m_number  = stoi(newNumber);
+    
+    SetShowValue(newNumber);
+}
+
+long long CExpression::GetNumber() const {
+    return m_number;
 }

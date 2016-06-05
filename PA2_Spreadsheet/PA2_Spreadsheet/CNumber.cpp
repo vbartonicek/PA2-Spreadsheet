@@ -17,3 +17,24 @@ CNumber::CNumber(){
 CNumber::~CNumber(){
     
 }
+
+void CNumber::SetNumber(const long long& newNumber){
+    std::ostringstream ss;
+    m_number  = newNumber;
+    
+    ss << m_number;
+    std::string str = ss.str();
+    SetShowValue(str);
+    SetEditValue(str);
+}
+
+void CNumber::SetNumber(const char * newNumber){
+    m_number  = stoi(newNumber);
+    
+    SetShowValue(newNumber);
+    SetEditValue(newNumber);
+}
+
+long long CNumber::GetNumber() const {
+    return m_number;
+}

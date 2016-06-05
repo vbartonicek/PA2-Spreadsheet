@@ -257,49 +257,27 @@ void CScreen::CloseWindow() const {
 
 void CScreen::HandleCellInput() {
     char str [100];
+    regex num_regex(REGEX_NUMBER);
+    regex num_expression(REGEX_EXPRESSION);
+    
     getstr(str);
     
-    if ( str[0] == '=') {
-        // EXPRESSION CANDIDATE
-        m_sheet->EditExpressionCell(m_curr_column, m_curr_row, str);
-        //printw("EXPRESSION Candidate: %s\n", str);
+    if ( strlen(str) > 99){
+        printw("WRONG INPUT\n");
         return;
     }
-    else {
-        int i = 0;
-        
-        while (str[i]){
-            if (i == 99) {
-                printw("WRONG INPUT\n");
-                return;
-            }
-            
-            if ( !isdigit(str[i]) ) {
-                while (str[i]){
-                    if (i == 99) {
-                        printw("WRONG INPUT\n");
-                        return;
-                    }
-                    
-                    if ( !isalnum(str[i]) ) {
-                        printw("WRONG INPUT\n");
-                        return;
-                    }
-                    i++;
-                }
-                // STRING
-                m_sheet->EditStringCell(m_curr_column, m_curr_row, str);
-                //printw("STRING\n");
-                return;
-            }
-            i++;
-        }
+    else if ( regex_match(str, num_regex)){
         // NUMBER
         m_sheet->EditNumberCell(m_curr_column, m_curr_row, str);
-        //printw("NUMBER\n");
-        return;
     }
-    
+    else if ( regex_match(str, num_expression)){
+        // EXPRESSION CANDIDATE
+        m_sheet->EditExpressionCell(m_curr_column, m_curr_row, str);
+    }
+    else {
+        // STRING
+        m_sheet->EditStringCell(m_curr_column, m_curr_row, str);
+    }
 }
 
 void CScreen::SetColumnPositionNext() {

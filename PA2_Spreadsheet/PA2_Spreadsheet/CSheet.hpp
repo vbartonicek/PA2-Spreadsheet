@@ -12,6 +12,10 @@
 #include <stdio.h>
 #include <iostream>
 #include <map>
+#include <regex>
+#include <math.h>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 #include "CCell.hpp"
 #include "CString.hpp"
 #include "CNumber.hpp"
@@ -88,6 +92,15 @@ public:
      * @return Returns the number of rows
      */
     int getRows() const;
+    
+    int GetColumnNumberByName(const char& name ) const;
+    
+    long long ABS(const CNumber * number) const;
+    long long SIN(const CNumber * number) const;
+    long long COS(const CNumber * number) const;
+    long long TAN(const CNumber * number) const;
+    long long RAND() const;
+    
     
 private:
     int m_columns;

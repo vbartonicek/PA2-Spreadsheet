@@ -1,5 +1,5 @@
 CXX=g++
-CXXFlags=-g -Wall -pedantic -lncurses -ggdb -std=c++11
+CXXFlags= -g -std=c++11 -Wall -pedantic -lncurses
 LD=G++
 LDFLAGS=-lncurses
 

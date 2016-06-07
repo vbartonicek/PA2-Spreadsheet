@@ -122,20 +122,20 @@ void CScreen::PrintTable(const int& x_start, const int& y_start) const {
     // VERTICAL LINES
     attron(COLOR_PAIR(2));
     move(y_start + 1, x_start + 0);
-    vline(0, 21);
+    vline(0, 19);
     move(y_start + 1, x_start + 9);
-    vline(0, 21);
+    vline(0, 19);
     attroff(COLOR_PAIR(2));
     
     // inner lines
     for (int i = 1; i != m_sheet->getColumns(); i++){
         move(y_start + 2 , x_start + 9 + 10 * i);
-        vline(0, 20);
+        vline(0, 18);
     }
     
     attron(COLOR_PAIR(2));
     move(y_start + 1 , x_start + 9 + 10 * m_sheet->getColumns());
-    vline(0, 21);
+    vline(0, 19);
     attroff(COLOR_PAIR(2));
     
     
@@ -279,7 +279,8 @@ void CScreen::HandleCellInput() {
     }
     else {
         // STRING
-        m_sheet->EditStringCell(m_curr_column, m_curr_row, str);
+        if ( str[0] == '=' ) m_sheet->EditExpressionCell(m_curr_column, m_curr_row, "NaN");
+        else m_sheet->EditStringCell(m_curr_column, m_curr_row, str);
     }
 }
 

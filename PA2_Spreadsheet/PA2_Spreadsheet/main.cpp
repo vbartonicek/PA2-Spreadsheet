@@ -16,7 +16,7 @@
  */
 
 int main(int argc, const char * argv[]) {
-    
+
     CSpreadsheetSimulator application;
     application.Run();
     

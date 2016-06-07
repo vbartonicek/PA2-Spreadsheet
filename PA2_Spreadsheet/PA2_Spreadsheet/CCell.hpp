@@ -56,7 +56,7 @@ public:
      * @details Method to set the edit value of the cell
      * @param[in] new_edit_value New edit value of the cell
      */
-    void SetEditValue(string new_edit_value);
+    virtual void SetEditValue(string new_edit_value);
     
     /**
      * @brief Get edit value

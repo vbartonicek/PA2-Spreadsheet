@@ -16,8 +16,8 @@
 #include <ncurses.h>
 #include <iostream>
 
-#define REGEX_NUMBER "-?[0-9]+(\\.?[0-9]+)?"
-#define REGEX_EXPRESSION "^=[A-Z0-9\\(\\):\\+\\*-/////ˆ%]*"
+#define REGEX_NUMBER "^-?[0-9]+(\\.?[0-9]+)?$"
+#define REGEX_EXPRESSION "^=[A-Z0-9\\(\\):\\+\\*-/////ˆ%]*$"
 
 #include "CSheet.hpp"
 

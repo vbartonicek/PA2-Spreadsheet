@@ -10,6 +10,7 @@
 #define CSheet_hpp
 
 #include <stdio.h>
+#include <string>
 #include <iostream>
 #include <map>
 #include <regex>
@@ -33,9 +34,9 @@ public:
      * @brief Constructor of the class.
      * @details
      * @param[in] columns How many columns will be created. Default value is 10
-     * @param[in] rows How many rows will be created. Default value is 10
+     * @param[in] rows How many rows will be created. Default value is 9
      */
-    CSheet(const int columns = 10, const int rows = 10);
+    CSheet(const int columns = 10, const int rows = 9);
     
     /**
      * @brief Destructor of the class.
@@ -103,12 +104,27 @@ public:
     
     int GetColumnNumberByName(const char& name ) const;
     
+    bool isPositionValid (const int column, const int row) const;
+    
     long long ABS(const CNumber * number) const;
     long long SIN(const CNumber * number) const;
     long long COS(const CNumber * number) const;
     long long TAN(const CNumber * number) const;
     long long RAND() const;
     
+    long long SUM(const int& co1, const int& ro1,const int& co2, const int& ro2 ) const;
+    long long AVG(const int& co1, const int& ro1,const int& co2, const int& ro2 ) const;
+
+    void HandleBasicCellOperation(const int column, const int row, const char * new_value);
+    void HandleFunctionOperation(const int column, const int row, const char * new_value);
+    void HandleFunctionSpecOperation(const int column, const int row, const char * new_value);
+    
+    long long Total( const CNumber * number1, const CNumber * number2) const;
+    long long Difference( const CNumber * number1, const CNumber * number2) const;
+    long long Product( const CNumber * number1, const CNumber * number2) const;
+    long long Division( const CNumber * number1, const CNumber * number2) const;
+    long long Modulo( const CNumber * number1, const CNumber * number2) const;
+    long long Power( const CNumber * number1, const CNumber * number2) const;
     
 private:
     int m_columns;

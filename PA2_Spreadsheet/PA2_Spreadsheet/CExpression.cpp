@@ -33,7 +33,6 @@ void CExpression::SetNumber(const long long& newNumber){
     ss << m_number;
     std::string str = ss.str();
     SetShowValue(str);
-    SetEditValue(str);
 }
 
 void CExpression::SetNumber(const char * newNumber){

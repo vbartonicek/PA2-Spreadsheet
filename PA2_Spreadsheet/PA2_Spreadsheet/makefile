@@ -1,5 +1,5 @@
 CXX=g++
-CXXFlags= -std=c++11 -Wall -pedantic -Wno-long-long -O0 -ggdb
+CXXFlags= -Wall -pedantic -std=c++11
 LD=G++
 LDFLAGS=-lncurses
 
@@ -9,7 +9,7 @@ SpreadsheetSimulator: main.o CSpreadsheetSimulator.o CSheet.o CScreen.o CCell.o 
 	$(LD) $(LDFLAGS) main.o CSpreadsheetSimulator.o CSheet.o CScreen.o CCell.o CString.o CNumber.o CExpression.o -o SpreadsheetSimulator
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -g -o $@
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LDFLAGS)
 
 clean:
 	rm SpreadsheetSimulator *.o

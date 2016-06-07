@@ -31,13 +31,13 @@ public:
      */
     ~CNumber();
     
-    void SetNumber(const long long& newNumber);
+    void SetNumber(const double& newNumber);
     void SetNumber(const char * newNumber);
     
-    long long GetNumber() const;
+    double GetNumber() const;
     
 private:
-    long long m_number;
+    double m_number;
 };
 
 #endif /* CNumber_hpp */

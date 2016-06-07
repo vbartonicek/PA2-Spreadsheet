@@ -18,15 +18,15 @@
 
 CExpression::CExpression(){
     m_type = TYPE_EXPRESSION;
-    m_show_value = "EXP";
-    m_edit_value = "Not processed";
+    m_show_value = "";
+    m_edit_value = "";
 }
 
 CExpression::~CExpression(){
     
 }
 
-void CExpression::SetNumber(const long long& newNumber){
+void CExpression::SetNumber(const double& newNumber){
     std::ostringstream ss;
     m_number  = newNumber;
     
@@ -41,8 +41,16 @@ void CExpression::SetNumber(const char * newNumber){
     SetShowValue(newNumber);
 }
 
-long long CExpression::GetNumber() const {
+double CExpression::GetNumber() const {
     return m_number;
+}
+
+void CExpression::SetProcessed(const bool& newProcessed){
+    m_processed = newProcessed;
+}
+
+bool CExpression::IsProcessed() const {
+    return m_processed;
 }
 
 bool CExpression::Validate() const {

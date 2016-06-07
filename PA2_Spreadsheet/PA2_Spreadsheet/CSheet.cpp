@@ -93,7 +93,7 @@ void CSheet::EditExpressionCell (const int column, const int row, const char * n
     }
     
     // ABS SIN COS TAN (cell)
-    else if ( regex_match(str, basic_op_regex) ) {
+    else if ( regex_match(str, function_regex) ) {
         HandleFunctionOperation(column, row, new_value);
         return;
     }
@@ -109,6 +109,8 @@ void CSheet::EditExpressionCell (const int column, const int row, const char * n
 
 void CSheet::HandleBasicCellOperation(const int column, const int row, const char * new_value){
     string str(new_value);
+    double number1;
+    double number2;
     CCell* cellToEdit  = m_sheet.at( make_pair(column, row));
     CExpression* expression = dynamic_cast<CExpression *>(cellToEdit);
     
@@ -122,13 +124,30 @@ void CSheet::HandleBasicCellOperation(const int column, const int row, const cha
         return;
     }
     
-    if (m_sheet.at( make_pair(co1, ro1))->GetTypeName() != "NUMBER" || m_sheet.at( make_pair(co2, ro2))->GetTypeName() != "NUMBER" ){
-        expression->SetEditValue("NaN - Both cells must be numbers");
+    auto cell1 =m_sheet.at( make_pair(co1, ro1));
+    auto cell2 =m_sheet.at( make_pair(co2, ro2));
+    
+    if (cell1->GetType() == TYPE_NUMBER){
+        number1 = dynamic_cast<CNumber *> (cell1)->GetNumber();
+    }
+    else if (cell1->GetType() == TYPE_EXPRESSION && dynamic_cast<CExpression *>(cell1)->IsProcessed()){
+        number1 = stod(cell1->GetShowValue());
+    }
+    else {
+        expression->SetEditValue("NaN - Cell must be number");
         return;
     }
     
-    auto number1 = dynamic_cast<CNumber *>( m_sheet.at( make_pair(co1, ro1)));
-    auto number2 = dynamic_cast<CNumber *>( m_sheet.at( make_pair(co2, ro2)));
+    if (cell2->GetType() == TYPE_NUMBER){
+        number2 = dynamic_cast<CNumber *> (cell2)->GetNumber();
+    }
+    else if (cell2->GetType() == TYPE_EXPRESSION && dynamic_cast<CExpression *>(cell2)->IsProcessed()){
+        number2 = stod(cell2->GetShowValue());
+    }
+    else {
+        expression->SetEditValue("NaN - Cell must be number");
+        return;
+    }
     
     expression->SetEditValue(str);
     
@@ -157,6 +176,8 @@ void CSheet::HandleBasicCellOperation(const int column, const int row, const cha
             return;
     }
     
+    expression->SetProcessed(true);
+    
     return;
 }
 
@@ -165,6 +186,7 @@ void CSheet::HandleFunctionOperation(const int column, const int row, const char
     string functionName = str.substr(1,3);
     CCell* cellToEdit  = m_sheet.at( make_pair(column, row));
     CExpression* expression = dynamic_cast<CExpression *>(cellToEdit);
+    double number;
     
     int co = GetColumnNumberByName(new_value[5]);
     int ro = new_value[6] - '0' -1;
@@ -174,21 +196,31 @@ void CSheet::HandleFunctionOperation(const int column, const int row, const char
         return;
     }
     
-    if (m_sheet.at( make_pair(co, ro))->GetTypeName() != "NUMBER"){
-        expression->SetEditValue("NaN - Both cells must be numbers");
+    auto cell =m_sheet.at( make_pair(co, ro));
+    
+    if (cell->GetType() == TYPE_NUMBER){
+        number = dynamic_cast<CNumber *> (cell)->GetNumber();
+    }
+    else if (cell->GetType() == TYPE_EXPRESSION && dynamic_cast<CExpression *>(cell)->IsProcessed()){
+        number = stod(cell->GetShowValue());
+    }
+    else {
+        expression->SetEditValue("NaN - Cell must be number");
         return;
     }
-    
-    auto number = dynamic_cast<CNumber *>( m_sheet.at( make_pair(co, ro)));
-    
     
     expression->SetEditValue(str);
     if ( functionName == "ABS" ) expression->SetNumber(ABS(number));
     else if ( functionName == "SIN" ) expression->SetNumber(SIN(number));
     else if ( functionName == "COS" ) expression->SetNumber(COS(number));
     else if ( functionName == "TAN" ) expression->SetNumber(TAN(number));
-    else expression->SetEditValue("NaN - Wrong function");
+    else {
+        expression->SetEditValue("NaN - Wrong function");
+        return;
+    }
     
+    expression->SetProcessed(true);
+
     return;
 }
 
@@ -197,9 +229,6 @@ void CSheet::HandleFunctionSpecOperation(const int column, const int row, const 
     string functionName = str.substr(1,3);
     CCell* cellToEdit  = m_sheet.at( make_pair(column, row));
     CExpression* expression = dynamic_cast<CExpression *>(cellToEdit);
-    
-    //0123456789
-    //=SUM(B1:C2)
     
     int co1 = GetColumnNumberByName(new_value[5]);
     int ro1 = new_value[6] - '0' -1;
@@ -215,9 +244,27 @@ void CSheet::HandleFunctionSpecOperation(const int column, const int row, const 
     expression->SetEditValue(str);
     if ( functionName == "SUM" ) expression->SetNumber(SUM(co1, ro1, co2, ro2));
     else if ( functionName == "AVG" ) expression->SetNumber(AVG(co1, ro1, co2, ro2));
-    else expression->SetEditValue("NaN - Wrong function");
+    else {
+        expression->SetEditValue("NaN - Wrong function");
+        return;
+    }
+    
+    expression->SetProcessed(true);
     
     return;
+}
+
+void CSheet::RecalculateExpressions(){
+    for (int col = 0; col < m_columns; col++){
+        
+        for (int row = 0; row < m_rows; row++){
+            auto cell = m_sheet.at( make_pair(col, row));
+            if ( cell->GetType() == TYPE_EXPRESSION && dynamic_cast<CExpression *>(cell)->IsProcessed() ) {
+                EditExpressionCell(col, row, cell->GetEditValue().c_str());
+            }
+        }
+    }
+    
 }
 
 
@@ -245,36 +292,35 @@ int CSheet::GetColumnNumberByName(const char& name) const {
 }
 
 
-long long CSheet::ABS(const CNumber * number) const {
-    if (number->GetNumber() < 0) return (-1) * number->GetNumber();
-    else return number->GetNumber();
+double CSheet::ABS(const double& number) const {
+    if (number < 0) return (-1) * number;
+    else return number;
 }
 
-long long CSheet::SIN(const CNumber * number) const {
-    return sin( number->GetNumber() );
+double CSheet::SIN(const double& number) const {
+    return sin( number );
 }
 
-long long CSheet::COS(const CNumber * number) const {
-    return cos( number->GetNumber() );
+double CSheet::COS(const double& number) const {
+    return cos( number );
 }
 
-long long CSheet::TAN(const CNumber * number) const {
-    return tan( number->GetNumber() );
+double CSheet::TAN(const double& number) const {
+    return tan( number );
 }
 
-long long CSheet::RAND() const {
+double CSheet::RAND() const {
     return rand();
 }
 
-long long CSheet::SUM(const int& co1, const int& ro1,const int& co2, const int& ro2 ) const {
-    long long sum = 0;
+double CSheet::SUM(const int& co1, const int& ro1,const int& co2, const int& ro2 ) const {
+    double sum = 0;
     int col_start;
     int row_start;
     
     int col_end;
     int row_end;
-    
-    
+
     if ( co1 < co2) {
         col_start = co1;
         col_end = co2;
@@ -297,7 +343,13 @@ long long CSheet::SUM(const int& co1, const int& ro1,const int& co2, const int& 
     for (int col = col_start; col <= col_end; col++){
     
         for (int row = row_start; row <= row_end; row++){
-            if ( m_sheet.at( make_pair(col, row))->GetTypeName() == "NUMBER" ) sum += stoi( m_sheet.at( make_pair(col, row))->GetShowValue() );
+            auto cell = m_sheet.at( make_pair(col, row));
+            if ( cell->GetType() == TYPE_NUMBER ) {
+                sum += stod( cell->GetShowValue() );
+            }
+            else if ( cell->GetType() == TYPE_EXPRESSION && dynamic_cast<CExpression *>(cell)->IsProcessed() ) {
+                sum += stod( cell->GetShowValue() );
+            }
         }
     }
     
@@ -305,8 +357,8 @@ long long CSheet::SUM(const int& co1, const int& ro1,const int& co2, const int& 
     return sum;
 }
 
-long long CSheet::AVG(const int& co1, const int& ro1,const int& co2, const int& ro2 ) const {
-    long long sum = 0;
+double CSheet::AVG(const int& co1, const int& ro1,const int& co2, const int& ro2 ) const {
+    double sum = 0;
     int count = 0;
     int col_start;
     int row_start;
@@ -337,8 +389,13 @@ long long CSheet::AVG(const int& co1, const int& ro1,const int& co2, const int& 
     for (int col = col_start; col <= col_end; col++){
         
         for (int row = row_start; row <= row_end; row++){
-            if ( m_sheet.at( make_pair(col, row))->GetTypeName() == "NUMBER" ) {
-                sum += stoi( m_sheet.at( make_pair(col, row))->GetShowValue() );
+            auto cell = m_sheet.at( make_pair(col, row));
+            if ( cell->GetType() == TYPE_NUMBER ) {
+                sum += stod( cell->GetShowValue() );
+                count++;
+            }
+            else if ( cell->GetType() == TYPE_EXPRESSION && dynamic_cast<CExpression *>(cell)->IsProcessed() ) {
+                sum += stod( cell->GetShowValue() );
                 count++;
             }
         }
@@ -348,26 +405,26 @@ long long CSheet::AVG(const int& co1, const int& ro1,const int& co2, const int& 
     return (sum / count);
 }
 
-long long CSheet::Total( const CNumber * number1, const CNumber * number2) const {
-    return number1->GetNumber() + number2->GetNumber();
+double CSheet::Total( const double& number1, const double& number2 ) const {
+    return number1 + number2;
 }
 
-long long CSheet::Difference( const CNumber * number1, const CNumber * number2) const {
-    return number1->GetNumber() - number2->GetNumber();
+double CSheet::Difference( const double& number1, const double& number2 ) const {
+    return number1 - number2;
 }
 
-long long CSheet::Product( const CNumber * number1, const CNumber * number2) const {
-    return number1->GetNumber() * number2->GetNumber();
+double CSheet::Product( const double& number1, const double& number2 ) const {
+    return number1 * number2;
 }
 
-long long CSheet::Division( const CNumber * number1, const CNumber * number2) const {
-    return number1->GetNumber() / number2->GetNumber();
+double CSheet::Division( const double& number1, const double& number2 ) const {
+    return number1 / number2;
 }
 
-long long CSheet::Modulo( const CNumber * number1, const CNumber * number2) const {
-    return number1->GetNumber() % number2->GetNumber();
+double CSheet::Modulo( const double& number1, const double& number2 ) const {
+    return fmod(number1, number2);
 }
 
-long long CSheet::Power( const CNumber * number1, const CNumber * number2) const {
-    return pow (number1->GetNumber(), number2->GetNumber());
+double CSheet::Power( const double& number1, const double& number2 ) const {
+    return pow (number1, number2);
 }

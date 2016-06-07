@@ -106,25 +106,27 @@ public:
     
     bool isPositionValid (const int column, const int row) const;
     
-    long long ABS(const CNumber * number) const;
-    long long SIN(const CNumber * number) const;
-    long long COS(const CNumber * number) const;
-    long long TAN(const CNumber * number) const;
-    long long RAND() const;
+    double ABS(const double& number) const;
+    double SIN(const double& number) const;
+    double COS(const double& number) const;
+    double TAN(const double& number) const;
+    double RAND() const;
     
-    long long SUM(const int& co1, const int& ro1,const int& co2, const int& ro2 ) const;
-    long long AVG(const int& co1, const int& ro1,const int& co2, const int& ro2 ) const;
+    double SUM(const int& co1, const int& ro1,const int& co2, const int& ro2 ) const;
+    double AVG(const int& co1, const int& ro1,const int& co2, const int& ro2 ) const;
 
     void HandleBasicCellOperation(const int column, const int row, const char * new_value);
     void HandleFunctionOperation(const int column, const int row, const char * new_value);
     void HandleFunctionSpecOperation(const int column, const int row, const char * new_value);
     
-    long long Total( const CNumber * number1, const CNumber * number2) const;
-    long long Difference( const CNumber * number1, const CNumber * number2) const;
-    long long Product( const CNumber * number1, const CNumber * number2) const;
-    long long Division( const CNumber * number1, const CNumber * number2) const;
-    long long Modulo( const CNumber * number1, const CNumber * number2) const;
-    long long Power( const CNumber * number1, const CNumber * number2) const;
+    void RecalculateExpressions();
+    
+    double Total( const double& number1, const double& number2 ) const;
+    double Difference( const double& number1, const double& number2 ) const;
+    double Product( const double& number1, const double& number2 ) const;
+    double Division( const double& number1, const double& number2 ) const;
+    double Modulo( const double& number1, const double& number2 ) const;
+    double Power( const double& number1, const double& number2 ) const;
     
 private:
     int m_columns;

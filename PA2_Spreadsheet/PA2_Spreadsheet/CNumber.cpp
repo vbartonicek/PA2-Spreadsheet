@@ -18,7 +18,7 @@ CNumber::~CNumber(){
     
 }
 
-void CNumber::SetNumber(const long long& newNumber){
+void CNumber::SetNumber(const double& newNumber){
     std::ostringstream ss;
     m_number  = newNumber;
     
@@ -29,12 +29,12 @@ void CNumber::SetNumber(const long long& newNumber){
 }
 
 void CNumber::SetNumber(const char * newNumber){
-    m_number  = stoi(newNumber);
+    m_number  = stod(newNumber);
     
     SetShowValue(newNumber);
     SetEditValue(newNumber);
 }
 
-long long CNumber::GetNumber() const {
+double CNumber::GetNumber() const {
     return m_number;
 }

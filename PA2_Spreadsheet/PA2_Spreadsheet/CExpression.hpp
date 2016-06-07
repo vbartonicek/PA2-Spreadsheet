@@ -33,15 +33,19 @@ public:
      */
     ~CExpression();
     
-    void SetNumber(const long long& newNumber);
+    void SetNumber(const double& newNumber);
     void SetNumber(const char * newNumber);
     
     bool Validate() const;
     
-    long long GetNumber() const;
+    void SetProcessed(const bool& newProcessed);
+    bool IsProcessed() const;
+    
+    double GetNumber() const;
     
 private:
-    long long m_number;
+    double m_number;
+    bool m_processed;
 };
 
 #endif /* CExpression_hpp */

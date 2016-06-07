@@ -16,7 +16,14 @@
  */
 
 int main(int argc, const char * argv[]) {
-
+//    double number = 2.55;
+//    
+//    string cislo = to_string(number);
+//    cout << "Cislo = " << cislo << endl;
+//    
+//    number = stod(cislo);
+//    cout << "Number = " << number << endl;
+//    
     CSpreadsheetSimulator application;
     application.Run();
     

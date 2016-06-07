@@ -170,6 +170,9 @@ void CScreen::PrintHeaders(const int& x_start, const int& y_start) const {
 
 void CScreen::PrintValues(const int& x_start, const int& y_start) const {
     string value;
+    
+    m_sheet->RecalculateExpressions();
+    
     for (int row = 0; row != m_sheet->getRows(); row++)
     {
         for (int col = 0; col != m_sheet->getColumns(); col++)
@@ -182,12 +185,12 @@ void CScreen::PrintValues(const int& x_start, const int& y_start) const {
                 mvprintw(y_start + 3 + 2 * row, x_start + 10 + 10 * col,"%c%c%c%c%c ...", value[0],value[1],value[2],value[3],value[4]);
             }
             else {
-                long long int i;
+                unsigned int i;
                 for ( i = 0; i != (9 - value.length()); i++ ) {
                     mvprintw(y_start + 3 + 2 * row, x_start + 10 + (int) i + 10 * col," ");
                 }
             
-                for ( long long int j = 0; j != value.length(); j++ ) {
+                for ( unsigned int j = 0; j != value.length(); j++ ) {
                     mvprintw(y_start + 3 + 2 * row, x_start + 10 + (int) i + (int) j + 10 * col,"%c", value[j]);
                 }
             }

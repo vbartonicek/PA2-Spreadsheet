@@ -10,9 +10,11 @@
 #define CExpression_hpp
 
 #include <stdio.h>
+#include <iostream>
 #include <string>
 #include <sstream>
 #include <set>
+#include <regex>
 #include "CCell.hpp"
 
 using namespace std;
@@ -33,6 +35,8 @@ public:
     
     void SetNumber(const long long& newNumber);
     void SetNumber(const char * newNumber);
+    
+    bool Validate() const;
     
     long long GetNumber() const;
     

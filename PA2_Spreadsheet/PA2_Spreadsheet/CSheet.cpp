@@ -35,6 +35,14 @@ CCell * CSheet::GetCell (const int column, const int row) const{
 
 }
 
+void CSheet::DeleteCell (const int column, const int row) {
+    if ( m_sheet.at( make_pair(column, row))->GetType() != TYPE_NOTSET ) {
+        delete m_sheet.at( make_pair(column, row));
+        CCell * newCell = new CCell;
+        m_sheet[make_pair(column,row)] = newCell;
+    }
+}
+
 void CSheet::EditNumberCell (const int column, const int row, const char * new_value){
     if ( m_sheet.at( make_pair(column, row))->GetType() != TYPE_NUMBER ) {
         delete m_sheet.at( make_pair(column, row));

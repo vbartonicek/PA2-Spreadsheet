@@ -76,6 +76,9 @@ void CScreen::ScreenManager() {
                 ClearEditInstructions(x_start, y_start);
                 break;
             case KEY_F(3):
+                m_sheet->DeleteCell(m_curr_column, m_curr_row);
+                break;
+            case KEY_F(4):
                 CloseWindow();
                 return;
             default:

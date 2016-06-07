@@ -53,6 +53,14 @@ public:
     CCell * GetCell (const int column, const int row) const;
     
     /**
+     * @brief Deletes cell on given position
+     * @details Method to delete a Cell on specific column and row
+     * @param[in] column Column number of requested cell
+     * @param[in] row Row number of requested cell
+     */
+    void DeleteCell (const int column, const int row);
+    
+    /**
      * @brief Edit Number cell
      * @details Method to edit cell of Number type on specific position
      * @param[in] column Column number to specific cell position

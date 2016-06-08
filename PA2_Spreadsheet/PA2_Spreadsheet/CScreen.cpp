@@ -35,10 +35,10 @@ void CScreen::ScreenManager() {
     
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
     init_pair(2, COLOR_YELLOW, COLOR_BLACK);
-    
     PrintTable(x_start, y_start);
     PrintHeaders(x_start, y_start);
     ClearHelp(x_start, y_start);
+    
     
     while (1){
         getmaxyx(stdscr, screenSize_x, screenSize_y);
@@ -47,7 +47,12 @@ void CScreen::ScreenManager() {
             mvprintw(0,0,"Screen must be a least %dx%d\n",(y_start + 110),(x_start + 30));
             refresh();
             getmaxyx(stdscr, screenSize_x, screenSize_y);
+            
+            PrintTable(x_start, y_start);
+            PrintHeaders(x_start, y_start);
+            ClearHelp(x_start, y_start);
         }
+        
         PrintValues(x_start, y_start);
         PrintStatus(x_start, y_start);
         refresh();

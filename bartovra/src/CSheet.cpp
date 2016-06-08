@@ -265,11 +265,16 @@ void CSheet::HandleFunctionSpecOperation(const int column, const int row, const 
 }
 
 void CSheet::RecalculateExpressions(){
+    regex_t rand_exp;
+    regcomp(&rand_exp, "^=RAND\\(\\)$", REG_EXTENDED);
+    
     for (int col = 0; col < m_columns; col++){
         
         for (int row = 0; row < m_rows; row++){
             auto cell = m_sheet.at( make_pair(col, row));
             if ( cell->GetType() == TYPE_EXPRESSION && dynamic_cast<CExpression *>(cell)->IsProcessed() ) {
+                const char * edit_value = cell->GetEditValue().c_str();
+                if ( !regexec(&rand_exp, edit_value, 0, NULL, 0)) continue;
                 EditExpressionCell(col, row, cell->GetEditValue().c_str());
             }
         }

@@ -66,7 +66,7 @@ void CScreen::ScreenManager() {
             case KEY_RIGHT:
                 SetColumnPositionNext();
                 break;
-            case KEY_F(1):
+            case KEY_F(5):
                 if ( help ) ClearHelp(x_start, y_start);
                 else PrintHelp(x_start, y_start);
                 help = ! help;
@@ -247,13 +247,13 @@ void CScreen::PrintHelp(const int& x_start, const int& y_start) const{
     attron(A_BOLD);
     printw("HELP\n");
     attroff(A_BOLD);
-    printw("F1 - Hide help\t\tF2 - Edit cell\t\tF3 - Exit\t Arrows - movement");
+    printw("F5 - Hide help\t\tF2 - Edit cell\t\tF3 - Exit\t Arrows - movement");
 }
 
 void CScreen::ClearHelp(const int& x_start, const int& y_start) const{
     move(y_start + 10 + 2 * m_sheet->getRows() , x_start + 0);
     clrtoeol();
-    printw("For help press F1");
+    printw("For help press F5");
     move(y_start + 11 + 2 * m_sheet->getRows() , x_start + 0);
     clrtoeol();
 }
@@ -263,7 +263,7 @@ void CScreen::CloseWindow() const {
 }
 
 void CScreen::HandleCellInput() {
-    char str [100];
+    char str [1000];
     
     regex_t num_regex_exp;
     regex_t num_expression_exp;

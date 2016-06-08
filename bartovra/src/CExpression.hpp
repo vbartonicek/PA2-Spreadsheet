@@ -18,6 +18,10 @@
 
 using namespace std;
 
+/**
+ * @brief Class representing single cell of Expression type.
+ * @details It stores expression data.
+ */
 class CExpression : public CCell {
 public:
     /**
@@ -61,10 +65,9 @@ public:
     bool IsProcessed() const;
     
     /**
-     * @brief Get name for column number
-     * @details Method to translate column position to column name
-     * @param[in] x_number Column number to translate
-     * @return Returns the column name
+     * @brief Get calculated number value
+     * @details Method to provide value of calculated number
+     * @return Returns the number value of the expression
      */
     double GetNumber() const;
     

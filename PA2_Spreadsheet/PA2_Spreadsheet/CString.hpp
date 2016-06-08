@@ -18,6 +18,10 @@
 
 using namespace std;
 
+/**
+ * @brief Class representing single cell of String type.
+ * @details It stores string data.
+ */
 class CString : public CCell {
 public:
     /**

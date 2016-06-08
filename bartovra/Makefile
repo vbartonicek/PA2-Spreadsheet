@@ -3,7 +3,7 @@ CXXFLAGS=-Wall -g -pedantic -Wno-long-long -O0 -ggdb -std=c++11
 LDFLAGS=-lncurses
 SRCS=src/main.cpp src/CSpreadsheetSimulator.cpp src/CScreen.cpp src/CSheet.cpp src/CCell.cpp src/CNumber.cpp src/CExpression.cpp src/CString.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
-EXEC=SpreadsheetSimulator
+EXEC=bartovra
 
 all: doc compile
 
@@ -23,10 +23,10 @@ CScreen.o: src/Screen.cpp src/Screen.hpp src/Sheet.hpp
 
 
 clean:
-	rm -rf src/*.o SpreadsheetSimulator doc
+	rm -rf src/*.o bartovra doc
 
 run:
-	./SpreadsheetSimulator
+	./bartovra
 
 doc: $(OBJS)
-	cd src;\
+	doxygen Doxyfile

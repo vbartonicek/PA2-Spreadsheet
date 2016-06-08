@@ -22,6 +22,11 @@
 
 using namespace std;
 
+
+/**
+ * @brief Class representing single cell.
+ * @details It stores cell data.
+ */
 class CCell {
 public:
     /**

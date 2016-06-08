@@ -145,7 +145,7 @@ public:
     /**
      * @brief Get name for column number
      * @details Method to translate column position to column name
-     * @param[in] x_number Column number to translate
+     * @param[in] number Column number to translate
      * @return Returns the column name
      */
     char GetColumnName(const int& number) const;

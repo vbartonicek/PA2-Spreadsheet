@@ -17,6 +17,10 @@
 
 using namespace std;
 
+/**
+ * @brief Class representing single cell of Number type.
+ * @details It stores number data.
+ */
 class CNumber : public CCell {
 public:
     /**

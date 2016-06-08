@@ -184,7 +184,6 @@ void CSheet::HandleBasicCellOperation(const int column, const int row, const cha
             expression->SetEditValue("NaN - Wrong operand");
             return;
     }
-    
     expression->SetProcessed(true);
     
     return;

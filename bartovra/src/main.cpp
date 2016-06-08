@@ -17,10 +17,10 @@
  *\n
  * CONTROLS:\n
  * Arrows - movement inside the sheet\n
- * F1 - Show/hide help\n
  * F2 - Edit value of selected cell (and confirm by hitting ENTER button)\n
  * F3 - Delete value of selected cell\n
  * F4 - Exit\n
+ * F5 - Show/hide help\n
  *\n
  *\n
  * FUNCTIONS:\n

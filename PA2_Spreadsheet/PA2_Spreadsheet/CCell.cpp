@@ -63,7 +63,15 @@ string CCell::GetTypeName() const {
     return name;
 }
 
-//ostream& operator<< (ostream& os, const CCell& cell) {
-//    os << cell.getShowValue();
-//    return os;
-//}
+void CCell::setDependency(const int& col, const int& row) {
+    m_dependencies.insert(make_pair(col,row));
+}
+
+bool CCell::isDependent(const int& col, const int& row){
+    if ( m_dependencies.find(make_pair(col,row)) != m_dependencies.end() ) return true;
+    else return false;
+}
+
+void CCell::clearDependencies() {
+    m_dependencies.clear();
+}

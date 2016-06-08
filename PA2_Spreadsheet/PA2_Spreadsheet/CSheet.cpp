@@ -112,7 +112,9 @@ void CSheet::EditExpressionCell (const int column, const int row, const char * n
         return;
     }
 
-    else m_sheet.at( make_pair(column, row))->SetEditValue("NaN - Wrong syntax");
+    else {
+    m_sheet.at( make_pair(column, row))->SetEditValue("NaN - Wrong syntax");
+    }
 }
 
 
@@ -120,13 +122,24 @@ void CSheet::HandleBasicCellOperation(const int column, const int row, const cha
     string str(new_value);
     double number1;
     double number2;
-    CCell* cellToEdit  = m_sheet.at( make_pair(column, row));
-    CExpression* expression = dynamic_cast<CExpression *>(cellToEdit);
     
     int co1 = GetColumnNumberByName(new_value[1]);
     int ro1 = new_value[2] - '0' -1;
     int co2 = GetColumnNumberByName(new_value[4]);
     int ro2 = new_value[5] - '0' -1;
+    
+    // dependency
+    if (m_sheet.at( make_pair(column, row))->isDependent(co1, co2) || m_sheet.at( make_pair(column, row))->isDependent(co1, co2)) {
+        delete m_sheet.at( make_pair(column, row));
+        CNumber * newCell = new CNumber;
+        m_sheet[make_pair(column,row)] = newCell;
+        newCell->SetNumber(0.0);
+        
+        return;
+    } else m_sheet.at( make_pair(column, row))->clearDependencies();
+        
+    CCell* cellToEdit  = m_sheet.at( make_pair(column, row));
+    CExpression* expression = dynamic_cast<CExpression *>(cellToEdit);
     
     if ( !isPositionValid(co1, ro1) || !isPositionValid(co2, ro2)) {
         expression->SetEditValue("NaN - Wrong cell position");
@@ -184,6 +197,9 @@ void CSheet::HandleBasicCellOperation(const int column, const int row, const cha
             expression->SetEditValue("NaN - Wrong operand");
             return;
     }
+    
+    expression->setDependency(co1, ro1);
+    expression->setDependency(co2, ro2);
     expression->SetProcessed(true);
     
     return;
@@ -192,12 +208,23 @@ void CSheet::HandleBasicCellOperation(const int column, const int row, const cha
 void CSheet::HandleFunctionOperation(const int column, const int row, const char * new_value){
     string str(new_value);
     string functionName = str.substr(1,3);
-    CCell* cellToEdit  = m_sheet.at( make_pair(column, row));
-    CExpression* expression = dynamic_cast<CExpression *>(cellToEdit);
     double number;
     
     int co = GetColumnNumberByName(new_value[5]);
     int ro = new_value[6] - '0' -1;
+    
+    // dependency
+    if (m_sheet.at( make_pair(column, row))->isDependent(co, co)) {
+        delete m_sheet.at( make_pair(column, row));
+        CNumber * newCell = new CNumber;
+        m_sheet[make_pair(column,row)] = newCell;
+        newCell->SetNumber(0.0);
+        
+        return;
+    } else m_sheet.at( make_pair(column, row))->clearDependencies();
+    
+    CCell* cellToEdit  = m_sheet.at( make_pair(column, row));
+    CExpression* expression = dynamic_cast<CExpression *>(cellToEdit);
     
     if ( !isPositionValid(co, ro)) {
         expression->SetEditValue("NaN - Wrong cell position");
@@ -227,6 +254,7 @@ void CSheet::HandleFunctionOperation(const int column, const int row, const char
         return;
     }
     
+    expression->setDependency(co, ro);
     expression->SetProcessed(true);
 
     return;
@@ -235,15 +263,26 @@ void CSheet::HandleFunctionOperation(const int column, const int row, const char
 void CSheet::HandleFunctionSpecOperation(const int column, const int row, const char * new_value){
     string str(new_value);
     string functionName = str.substr(1,3);
-    CCell* cellToEdit  = m_sheet.at( make_pair(column, row));
-    CExpression* expression = dynamic_cast<CExpression *>(cellToEdit);
-    expression->SetProcessed(false);
     
     int co1 = GetColumnNumberByName(new_value[5]);
     int ro1 = new_value[6] - '0' -1;
     
     int co2 = GetColumnNumberByName(new_value[8]);
     int ro2 = new_value[9] - '0' -1;
+    
+    // dependency
+    if (m_sheet.at( make_pair(column, row))->isDependent(co1, co2) || m_sheet.at( make_pair(column, row))->isDependent(co1, co2)) {
+        delete m_sheet.at( make_pair(column, row));
+        CNumber * newCell = new CNumber;
+        m_sheet[make_pair(column,row)] = newCell;
+        newCell->SetNumber(0.0);
+        
+        return;
+    } else m_sheet.at( make_pair(column, row))->clearDependencies();
+    
+    CCell* cellToEdit  = m_sheet.at( make_pair(column, row));
+    CExpression* expression = dynamic_cast<CExpression *>(cellToEdit);
+    expression->SetProcessed(false);
     
     if ( !isPositionValid(co1, ro1) || !isPositionValid(co2, ro2)) {
         expression->SetEditValue("NaN - Wrong cell position");
@@ -257,7 +296,9 @@ void CSheet::HandleFunctionSpecOperation(const int column, const int row, const 
         expression->SetEditValue("NaN - Wrong function");
         return;
     }
-
+    
+    expression->setDependency(co1, ro1);
+    expression->setDependency(co2, ro2);
     expression->SetProcessed(true);
     
     return;

@@ -83,11 +83,35 @@ public:
      */
     string GetTypeName() const;
     
+    
+    /**
+     * @brief Set cell to be dependent on given cell
+     * @details Method to add dependency on cell described by given value
+     * @param[in] col Column of cell to add to dependency container
+     * @param[in] row Row of cell to add to dependency container
+     */
+    void setDependency(const int& col, const int& row);
+    
+    /**
+     * @brief Dependency check
+     * @details Method to check whether the cell is dependent on Cell on given position
+     * @param[in] col Column of cell to check
+     * @param[in] row Row of cell to check
+     * @return Returns true if cells are dependent. If not it returns false
+     */
+    bool isDependent(const int& col, const int& row);
+    
+    /**
+     * @brief Empty the dependencies container
+     * @details Method to clear all records in the dependencies container
+     */
+    void clearDependencies();
+    
 protected:
     int m_type;
     string m_show_value;
     string m_edit_value;
-    set <CCell *> m_dependencies;
+    set < pair<int, int> > m_dependencies;
 private:
     
 };
